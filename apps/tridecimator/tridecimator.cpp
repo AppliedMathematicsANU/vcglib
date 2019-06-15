@@ -115,7 +115,7 @@ int main(int argc ,char**argv)
   int FinalNumFaces = int(Decimation);
   if (Decimation <= 1.0)
   {
-      FinalNumFaces = mesh.fn * Decimation;
+      FinalNumFaces = mesh.fn * (1.0 - Decimation);
   }
   int FinalSize = FinalNumFaces;
   printf("mesh loaded %d %d \n",mesh.vn,mesh.fn);
