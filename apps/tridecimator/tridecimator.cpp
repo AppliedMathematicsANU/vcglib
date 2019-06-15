@@ -105,13 +105,19 @@ int main(int argc ,char**argv)
 
   MyMesh mesh;
   
-  int FinalSize=atoi(argv[3]);
+  double Decimation=atof(argv[3]);
   int err=vcg::tri::io::Importer<MyMesh>::Open(mesh,argv[1]);
   if(err)
   {
     printf("Unable to open mesh %s : '%s'\n",argv[1],vcg::tri::io::Importer<MyMesh>::ErrorMsg(err));
     exit(-1);
   }
+  int FinalNumFaces = int(Decimation);
+  if (Decimation <= 1.0)
+  {
+      FinalNumFaces = mesh.fn * Decimation;
+  }
+  int FinalSize = FinalNumFaces;
   printf("mesh loaded %d %d \n",mesh.vn,mesh.fn);
 
   TriEdgeCollapseQuadricParameter qparams;
