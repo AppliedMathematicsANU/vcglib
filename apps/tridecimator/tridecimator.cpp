@@ -167,31 +167,36 @@ int main(int argc ,char**argv)
       printf("Removed %i duplicate and %i unreferenced vertices from mesh \n",dup,unref);
   }
 
+  if (FinalSize < mesh.fn)
+  {
+      printf("reducing it to %i\n",FinalSize);
 
-  printf("reducing it to %i\n",FinalSize);
+      vcg::tri::UpdateBounding<MyMesh>::Box(mesh);
 
-  vcg::tri::UpdateBounding<MyMesh>::Box(mesh);
+      // decimator initialization
+      vcg::LocalOptimization<MyMesh> DeciSession(mesh,&qparams);
 
-  // decimator initialization
-  vcg::LocalOptimization<MyMesh> DeciSession(mesh,&qparams);
+      int t1=clock();
+      DeciSession.Init<MyTriEdgeCollapse>();
+      int t2=clock();
+      printf("Initial Heap Size %i\n",int(DeciSession.h.size()));
 
-  int t1=clock();
-  DeciSession.Init<MyTriEdgeCollapse>();
-  int t2=clock();
-  printf("Initial Heap Size %i\n",int(DeciSession.h.size()));
+      DeciSession.SetTargetSimplices(FinalSize);
+      DeciSession.SetTimeBudget(0.5f);
+      if(TargetError< std::numeric_limits<float>::max() ) DeciSession.SetTargetMetric(TargetError);
 
-  DeciSession.SetTargetSimplices(FinalSize);
-  DeciSession.SetTimeBudget(0.5f);
-  if(TargetError< std::numeric_limits<float>::max() ) DeciSession.SetTargetMetric(TargetError);
+      while(DeciSession.DoOptimization() && mesh.fn>FinalSize && DeciSession.currMetric < TargetError)
+        printf("Current Mesh size %7i heap sz %9i err %9g \r",mesh.fn, int(DeciSession.h.size()),DeciSession.currMetric);
 
-  while(DeciSession.DoOptimization() && mesh.fn>FinalSize && DeciSession.currMetric < TargetError)
-    printf("Current Mesh size %7i heap sz %9i err %9g \r",mesh.fn, int(DeciSession.h.size()),DeciSession.currMetric);
-
-  int t3=clock();
-  printf("mesh  %d %d Error %g \n",mesh.vn,mesh.fn,DeciSession.currMetric);
-  printf("\nCompleted in (%5.3f+%5.3f) sec\n",float(t2-t1)/CLOCKS_PER_SEC,float(t3-t2)/CLOCKS_PER_SEC);
-
+      int t3=clock();
+      printf("mesh  %d %d Error %g \n",mesh.vn,mesh.fn,DeciSession.currMetric);
+      printf("\nCompleted in (%5.3f+%5.3f) sec\n",float(t2-t1)/CLOCKS_PER_SEC,float(t3-t2)/CLOCKS_PER_SEC);
+  }
+  else
+  {
+      printf("\nFinalSize=%d >= mesh.fn=%d, skipped decimation.\n", FinalSize, mesh.fn);
+  }
   vcg::tri::io::ExporterPLY<MyMesh>::Save(mesh,argv[2]);
-    return 0;
+  return 0;
 
 }
