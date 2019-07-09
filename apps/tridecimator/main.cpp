@@ -64,7 +64,7 @@ int main(int argc ,char**argv)
 
   TriEdgeCollapseQuadricParameter qparams;
   qparams.QualityThr  =.3;
-  float TargetError=std::numeric_limits<double>::max();
+  double TargetError=std::numeric_limits<double>::max();
   bool CleaningFlag =false;
      // parse command line.
     for(int i=4; i < argc;)
@@ -92,7 +92,7 @@ int main(int argc ,char**argv)
         case 'q' :	qparams.QualityThr	= atof(argv[i]+2);	           printf("Setting Quality Thr to %f\n",atof(argv[i]+2)); 	 break;
         case 'n' :	qparams.NormalThrRad = math::ToRad(atof(argv[i]+2));  printf("Setting Normal Thr to %f deg\n",atof(argv[i]+2)); break;
         case 'b' :	qparams.BoundaryWeight  = atof(argv[i]+2);			printf("Setting Boundary Weight to %f\n",atof(argv[i]+2)); break;
-        case 'e' :	TargetError = float(atof(argv[i]+2));			printf("Setting TargetError to %g\n",atof(argv[i]+2)); break;
+        case 'e' :	TargetError = double(atof(argv[i]+2));			printf("Setting TargetError to %g\n",atof(argv[i]+2)); break;
         case 'C' :	CleaningFlag=true;  printf("Cleaning mesh before simplification\n"); break;
 
         default  :  printf("Unknown option '%s'\n", argv[i]);
