@@ -1,1 +1,1 @@
-from . import _tridecimator
+from ._tridecimator import Mesh, TriEdgeCollapseQuadricParameter, clean, decimate

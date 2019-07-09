@@ -35,10 +35,10 @@ struct MyUsedTypes: public vcg::UsedTypes<vcg::Use<MyVertex>::AsVertexType,vcg::
 
 class MyVertex  : public vcg::Vertex< MyUsedTypes,
     vcg::vertex::VFAdj,
-    vcg::vertex::Coord3f,
-    vcg::vertex::Normal3f,
+    vcg::vertex::Coord3d,
+    vcg::vertex::Normal3d,
     vcg::vertex::Mark,
-    vcg::vertex::Qualityf,
+    vcg::vertex::Qualityd,
     vcg::vertex::BitFlags  >{
 public:
   vcg::math::Quadric<double> &Qd() {return q;}
@@ -66,11 +66,14 @@ class MyTriEdgeCollapse: public vcg::tri::TriEdgeCollapseQuadric< MyMesh, Vertex
             inline MyTriEdgeCollapse(  const VertexPair &p, int i, vcg::BaseParameterClass *pp) :TECQ(p,i,pp){}
 };
 
+std::string
+toString(vcg::tri::TriEdgeCollapseQuadricParameter & qparams);
+
 std::pair<std::size_t, std::size_t>
 cleanMesh(
     MyMesh & mesh,
     const bool removeDuplicate=true,
-    const bool removeUnreferences=true
+    const bool removeUnreferenced=true
 );
 
 double
@@ -78,7 +81,7 @@ decimateMesh(
     MyMesh & mesh,
     const std::size_t finalNumFaces,
     vcg::tri::TriEdgeCollapseQuadricParameter & qparms,
-    const float targetError=std::numeric_limits<float>::max()
+    const double targetError=std::numeric_limits<double>::max()
 );
 
 #endif /* VCGLIB_APPS_TRIDECIMATOR_H */

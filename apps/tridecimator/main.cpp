@@ -64,7 +64,7 @@ int main(int argc ,char**argv)
 
   TriEdgeCollapseQuadricParameter qparams;
   qparams.QualityThr  =.3;
-  float TargetError=std::numeric_limits<float>::max();
+  float TargetError=std::numeric_limits<double>::max();
   bool CleaningFlag =false;
      // parse command line.
     for(int i=4; i < argc;)
@@ -100,7 +100,6 @@ int main(int argc ,char**argv)
       }
       i++;
     }
-
 
 
   if(CleaningFlag){
