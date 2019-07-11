@@ -53,13 +53,15 @@ class DecimateTest(_unittest.TestCase):
     def test_decimate(self):
         """
         """
+        import numpy as np
+
         from . import Mesh, decimate
         if hasattr(_trimesh, "io"):
             export_mesh = _trimesh.io.export.export_mesh
         else:
             export_mesh = _trimesh.exchange.export.export_mesh
 
-        t_sphere = _trimesh.primitives.Sphere(radius=1.0, center=(1.0, 1.0, 1.0), subdivisions=4)
+        t_sphere = _trimesh.primitives.Sphere(radius=1.0, center=(1.0, 2.0, -4.0), subdivisions=4)
 
         # export_mesh(t_sphere, "t_sphere.ply")
 
@@ -71,6 +73,14 @@ class DecimateTest(_unittest.TestCase):
         # export_mesh(_trimesh.Trimesh(vertices=mesh.vertices, faces=mesh.faces, process=False), "decimated.ply")
         self.assertLessEqual(mesh.num_faces, final_num_faces)
         self.assertLessEqual(mesh.faces.shape[0], final_num_faces)
+        self.assertLessEqual(
+            np.max(
+                np.absolute(
+                    _trimesh.proximity.signed_distance(t_sphere, mesh.vertices)
+                )
+            ),
+            0.005
+        )
 
 
 if __name__ == "__main__":
