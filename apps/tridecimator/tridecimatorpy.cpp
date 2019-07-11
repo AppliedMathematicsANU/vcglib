@@ -227,7 +227,7 @@ decimateMeshPy(
     {
         qparms = boost::python::extract<vcg::tri::TriEdgeCollapseQuadricParameter>(qparmsObj)();
     }
-    std::cout << std::endl << "qparms:\n" << toString(qparms) << std::endl;
+    // std::cout << std::endl << "qparms:\n" << toString(qparms) << std::endl;
 
     return decimateMesh(mesh, finalNumFaces, qparms, targetError);
 }
