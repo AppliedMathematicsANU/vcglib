@@ -57,8 +57,8 @@ public:
         namespace p = boost::python;
         namespace np = bpnp;
 
-        ndarray vertices = bpnp::array(verticesObj);
-        ndarray faces = bpnp::array(facesObj);
+        ndarray vertices = bpnp::array(verticesObj, np::dtype::get_builtin<CoordScalarType>());
+        ndarray faces = bpnp::array(facesObj, np::dtype::get_builtin<std::int64_t>());
         const std::int64_t numVertices = vertices.shape(0);
         const std::int64_t numFaces = faces.shape(0);
 
@@ -83,7 +83,7 @@ public:
             {
                 for (std::size_t j = 0; j < 3; ++j)
                 {
-                    (*fi).V(j) = &(this->vert[p::extract<int64_t>(faces[p::make_tuple(i, j)])()]);
+                    (*fi).V(j) = &(this->vert[p::extract<std::int64_t>(faces[p::make_tuple(i, j)])()]);
                 }
                 ++fi;
             }
