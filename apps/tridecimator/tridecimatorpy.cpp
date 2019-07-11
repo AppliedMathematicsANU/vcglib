@@ -222,11 +222,13 @@ decimateMeshPy(
     const double targetError=std::numeric_limits<double>::max()
 )
 {
-    vcg::tri::TriEdgeCollapseQuadricParameter qparms;
+    vcg::tri::TriEdgeCollapseQuadricParameter qparms = defaultQParams();
     if (!qparmsObj.is_none())
     {
-        qparms = defaultQParams();
+        qparms = boost::python::extract<vcg::tri::TriEdgeCollapseQuadricParameter>(qparmsObj)();
     }
+    std::cout << std::endl << "qparms:\n" << toString(qparms) << std::endl;
+
     return decimateMesh(mesh, finalNumFaces, qparms, targetError);
 }
 
